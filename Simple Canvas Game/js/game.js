@@ -10,8 +10,12 @@ var bgReady = false;
 var bgImage = new Image();
 bgImage.onload = function()
 {
-    bgReady = true;
-}
+    bgReady = true; // 此时还没执行；在页面完成加载后才为true，在后面脚本中输出也仍为原值
+    console.log(bgReady);
+
+    // 因为onload在页面完成加载后才会被调用，所以这里用write会导致刷新页面
+    // document.write(bgReady);
+};
 bgImage.src = "images/background.png";
 
 // 3.游戏对象
@@ -37,24 +41,24 @@ var keysDown = {};
 function keydownFunction(e)
 {
     keysDown[e.keyCode] = true;
-    console.log("keydown " + e.keyCode);    
-    console.log(e.keyCode + ": " + keysDown[e.keyCode]); 
+    console.log("keydown " + e.key + " " + e.keyCode);    
+    console.log(e.keyCode + ": " + keysDown[e.keyCode]);
 }
 
 function keyupFunction(e)
 {
     delete keysDown[e.keyCode];
-    console.log("keyup " + e.keyCode);    
+    console.log("keyup " + e.key + " " + e.keyCode);    
     console.log(e.keyCode + ": " + keysDown[e.keyCode]);
 }
 
-// 没有通过对象，通过下面的remove调试得知，即是window对象直接调用addEventListener
+// 没有通过对象调用；通过下面的remove调试得知，即是window对象直接调用addEventListener
 addEventListener("keydown", keydownFunction, false);
 
 addEventListener("keyup", keyupFunction, false);
 
 // window.removeEventListener("keydown", keydownFunction);
-removeEventListener("keydown", keydownFunction);
+// removeEventListener("keydown", keydownFunction);
 
 // document.removeEventListener("keyup", keyupFunction);
 // removeEventListener("keyup", keyupFunction);
@@ -125,9 +129,9 @@ myTest();
 function myTest()
 {
     testCreateCanvas();    
-    testImageReady();
     testGameObject();
     testDocument();
+    testImageReady();
 }
 
 function testCreateCanvas()
@@ -137,14 +141,6 @@ function testCreateCanvas()
     document.write("画布边缘" + "<br>");
     document.write(canvas + "<br>");
     document.write(ctx + "<br>");
-}
-
-function testImageReady()
-{
-    document.write(bgReady + "<br>");
-    document.write(bgImage.src + "<br>");
-    document.write(bgImage.complete + "<br>");
-    // document.write(bgImage.onload + "<br>");
 }
 
 function testGameObject()
@@ -161,4 +157,11 @@ function testDocument()
     document.writeln(window.document == document);
     document.writeln(window.document === document);
     document.write("<br>");
+}
+
+function testImageReady()
+{
+    document.write(bgReady + "<br>");
+    document.write(bgImage.src + "<br>");
+    document.write(bgImage.complete + "<br>");
 }
