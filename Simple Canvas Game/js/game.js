@@ -17,15 +17,15 @@ bgImage.src = "images/background.png";
 // 3.游戏对象
 var hero = {
     speed : 256,    // movement in pixels per second
-    x : 0,
-    y : 0
-}
+    x: 0,
+    y: 0
+};
 
 var monster = {
-    speed : 0,
-    x : 0,
-    y : 0
-}
+    // speed : 0,
+    x: 0,
+    y: 0,
+};
 
 var monsterCaught = 0;
 
@@ -34,16 +34,30 @@ var monsterCaught = 0;
 // 用 KeyDown 缓存按键序列
 var keysDown = {};
 
-// 没有通过对象，而是直接调用？
-addEventListener("keydown", function(e)
+function keydownFunction(e)
 {
     keysDown[e.keyCode] = true;
-}, false);
+    console.log("keydown " + e.keyCode);    
+    console.log(e.keyCode + ": " + keysDown[e.keyCode]); 
+}
 
-addEventListener("keyup", function(e)
+function keyupFunction(e)
 {
     delete keysDown[e.keyCode];
-}, false);
+    console.log("keyup " + e.keyCode);    
+    console.log(e.keyCode + ": " + keysDown[e.keyCode]);
+}
+
+// 没有通过对象，通过下面的remove调试得知，即是window对象直接调用addEventListener
+addEventListener("keydown", keydownFunction, false);
+
+addEventListener("keyup", keyupFunction, false);
+
+// window.removeEventListener("keydown", keydownFunction);
+removeEventListener("keydown", keydownFunction);
+
+// document.removeEventListener("keyup", keyupFunction);
+// removeEventListener("keyup", keyupFunction);
 
 // 5.新游戏
 // 当玩家抓住怪物时重置游戏中的某些状态
@@ -110,9 +124,10 @@ myTest();
 
 function myTest()
 {
-    testCreateCanvas();
+    testCreateCanvas();    
     testImageReady();
     testGameObject();
+    testDocument();
 }
 
 function testCreateCanvas()
@@ -127,10 +142,23 @@ function testCreateCanvas()
 function testImageReady()
 {
     document.write(bgReady + "<br>");
+    document.write(bgImage.src + "<br>");
+    document.write(bgImage.complete + "<br>");
+    // document.write(bgImage.onload + "<br>");
 }
 
 function testGameObject()
 {
     document.write(hero + "<br>");
     document.write(monster + "<br>");
+}
+
+// 测试document对象和window对象的关系
+function testDocument()
+{
+    document.writeln(document);
+    document.writeln(window.document);
+    document.writeln(window.document == document);
+    document.writeln(window.document === document);
+    document.write("<br>");
 }
