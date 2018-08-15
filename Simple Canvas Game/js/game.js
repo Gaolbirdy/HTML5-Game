@@ -10,23 +10,27 @@ var bgReady = false;
 var bgImage = new Image();
 bgImage.onload = function()
 {
-    bgReady = true; // 此时还没执行；在页面完成加载后才为true，在后面脚本中输出也仍为原值
+    bgReady = true; // 此时还没执行；在页面完成加载后才为true，在后面脚本中输出也仍为原值false
     console.log(bgReady);
     
     // 因为onload在页面完成加载后才会被调用，所以这里用write会导致刷新页面
     // document.write(bgReady);
+
+    if(bgReady)
+        ctx.drawImage(bgImage, 0, 0);
 };
 bgImage.src = "images/background.png";
 
+
 // 3.游戏对象
 var hero = {
-    speed : 256,    // movement in pixels per second
+    speed: 256,    // movement in pixels per second
     x: 0,
     y: 0
 };
 
 var monster = {
-    // speed : 0,
+    // speed: 0,
     x: 0,
     y: 0,
 };
@@ -124,7 +128,7 @@ var update = function(modifier)
 
 
 // 测试
-myTest();
+// myTest();
 
 function myTest()
 {
