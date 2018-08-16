@@ -16,10 +16,32 @@ bgImage.onload = function()
     // 因为onload在页面完成加载后才会被调用，所以这里用write会导致刷新页面
     // document.write(bgReady);
 
-    if(bgReady)
-        ctx.drawImage(bgImage, 0, 0);
+    // if(bgReady)
+    //     ctx.drawImage(bgImage, 0, 0);
 };
 bgImage.src = "images/background.png";
+
+// hero image
+var heroReady = false;
+var heroImage = new Image();
+heroImage.onload = function()
+{
+    heroReady = true;
+    // if(heroReady)
+    //     ctx.drawImage(heroImage, 100, 50);
+}
+heroImage.src = "images/hero.png";
+
+// Monster image
+var monsterReady = false;
+var monsterImage = new Image();
+monsterImage.onload = function()
+{
+    monsterReady = true;
+    // if(monsterReady)
+    //     ctx.drawImage(monsterImage, 200, 100);
+}
+monsterImage.src = "images/monster.png";
 
 
 // 3.游戏对象
@@ -76,32 +98,46 @@ var reset = function()
 
     // 将怪物随机放在屏幕上的某个位置
     monster.x = 32 + (Math.random() * (canvas.width - 64));
-    monster.x = 32 + (Math.random() * (canvas.height - 64));
+    monster.y = 32 + (Math.random() * (canvas.height - 64));
 };
 
 // 6.更新对象状态
-var update = function(modifier)
+var update = function(modifier) 
 {
     // 键盘
     if(38 in keysDown)  // Player holding up
     {
-        hero.y -= hero.speed + modifier;
+        hero.y -= hero.speed * modifier;    // speed, 预期每秒移动像素数；modifier = 一次update耗时 / 1000ms;
     }
     if(40 in keysDown)  // Player holding down
     {
-        hero.y += hero.speed + modifier;
+        hero.y += hero.speed * modifier;
     }
     if(37 in keysDown)  // Player holding left
     {
-        hero.y -= hero.speed + modifier;
+        hero.x -= hero.speed * modifier;
     }
     if(39 in keysDown)  // Player holding right
     {
-        hero.y += hero.speed + modifier;
+        hero.x += hero.speed * modifier;
     }
 
     // 怪物和英雄是否相遇?
     // 根据怪物图片和英雄图片位置的距离来判断
+    // 碰撞条件 水平重叠 且 垂直重叠
+    // （认为图片的左上角的点是该单位的坐标x, y）
+
+    // 水平相交的情况：
+    // hero从monster右侧重叠
+    // hero.x <= monster.x + monster.width   (monster图片的宽度)
+    // hero从monster左侧重叠
+    // monster.x <= hero.x + hero.width (hero图片的宽度)
+
+    // 垂直相交的情况：
+    // hero从monster下侧重叠
+    // hero.y <= monster.y + monster.height   (monster图片的高度)
+    // hero从monster上侧重叠
+    // monster.y <= hero.y + hero.height(hero图片的宽度)
     if(
         hero.x <= (monster.x + 32)
         && monster.x <= (hero.x + 32)
@@ -115,16 +151,48 @@ var update = function(modifier)
 };
 
 // 7.渲染对象
+// 绘制所有东西
+var render = function()
+{
+    if(bgReady)
+        ctx.drawImage(bgImage, 0, 0);
 
+    if(heroReady)
+        ctx.drawImage(heroImage, hero.x, hero.y);
+
+    if(monsterReady)
+        ctx.drawImage(monsterImage, monster.x, monster.y);
+
+    // Score
+    ctx.fillStyle = "250, 250, 250";
+    ctx.font = "24px Helvetic";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.fillText("Monsterrs caught: " + monsterCaught, 32, 32);
+};
 
 // 8.游戏主循环
+var main = function()
+{
+    var now = Date.now();
+    var delta = now - then;
 
+    update(delta / 1000);
+    render();
+
+    then = now;
+
+    // 再次调用主循环
+    requestAnimationFrame(main);
+};
 
 // 9.游戏主循环的注解
 
 
 // 10.开始游戏
-
+var then = Date.now();
+reset();
+main();
 
 
 // 测试
