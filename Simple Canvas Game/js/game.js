@@ -67,15 +67,15 @@ var keysDown = {};
 function keydownFunction(e)
 {
     keysDown[e.keyCode] = true;
-    console.log("keydown " + e.key + " " + e.keyCode);    
-    console.log(e.keyCode + ": " + keysDown[e.keyCode]);
+    // console.log("keydown " + e.key + " " + e.keyCode);    
+    // console.log(e.keyCode + ": " + keysDown[e.keyCode]);
 }
 
 function keyupFunction(e)
 {
     delete keysDown[e.keyCode];
-    console.log("keyup " + e.key + " " + e.keyCode);    
-    console.log(e.keyCode + ": " + keysDown[e.keyCode]);
+    // console.log("keyup " + e.key + " " + e.keyCode);    
+    // console.log(e.keyCode + ": " + keysDown[e.keyCode]);
 }
 
 // 没有通过对象调用；通过下面的remove调试得知，即是window对象直接调用addEventListener
@@ -164,8 +164,8 @@ var render = function()
         ctx.drawImage(monsterImage, monster.x, monster.y);
 
     // Score
-    ctx.fillStyle = "250, 250, 250";
-    ctx.font = "24px Helvetic";
+    ctx.fillStyle = "rgb(50, 250, 250)";
+    ctx.font = "24px Helvetica";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
     ctx.fillText("Monsterrs caught: " + monsterCaught, 32, 32);
@@ -176,6 +176,7 @@ var main = function()
 {
     var now = Date.now();
     var delta = now - then;
+    // console.log(delta);
 
     update(delta / 1000);
     render();
@@ -187,12 +188,15 @@ var main = function()
 };
 
 // 9.游戏主循环的注解
-
+var w = window;
+requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequstAnimationFrame;
 
 // 10.开始游戏
 var then = Date.now();
 reset();
 main();
+// setInterval("main()", 1000/60);
+
 
 
 // 测试
