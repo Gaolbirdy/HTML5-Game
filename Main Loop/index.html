@@ -1,5 +1,6 @@
 <!-- <script>
 // 基础主循环
+
 main();
 
 function main() {
@@ -49,3 +50,69 @@ function exit() {
     console.log('exit');
 }
 </script> -->
+
+
+<script>
+// 基于时间的主循环
+
+main();
+
+function main() {
+    console.log('main');
+
+    let running = true;
+
+    init(); // 初始化整个体系，框架、图形、声音等等
+
+    loop(running); // 主循环
+
+    exit(); // 退出，关闭各种接口等
+}
+
+function init() {
+    console.log('init');
+}
+
+function loop(running) {
+    console.log('loop');
+
+    let date = new Date();    
+    let totalTime = date.getSeconds();  // 取得当前时间 或程序运行的总时间
+    let lastTime = 0;
+    let deltaTime = 0;
+
+    while (running) {
+        totalTime = date.getSeconds();
+
+        update();   // 执行游戏逻辑
+        draw(); // 绘制游戏
+
+        if (escape()) {
+            running = false;
+        }
+    }
+}
+
+function update() {
+    console.log('update');
+}
+
+function draw() {
+    console.log('draw');
+}
+
+function escape() {
+    console.log('escape');
+
+    // return true;
+}
+
+function exit() {
+    console.log('exit');
+}
+</script>
+
+
+<script>
+// 基于时钟的主循环
+</script>
