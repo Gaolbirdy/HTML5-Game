@@ -6,29 +6,28 @@ main();
 function main() {
     console.log('main');
 
-    let running = true;
+    running = true; // 为了在loop()里能直接修改running值，去掉了var或let
 
     init(); // 初始化整个体系，框架、图形、声音等等
 
-    loop(running); // 主循环
+    loop(); // 主循环
 
     exit(); // 退出，关闭各种接口等
 }
 
 function init() {
     console.log('init');
+
+    // 绑定esc退出游戏循环
+    document.onkeydown = keyDown;
 }
 
-function loop(running) {
+function loop() {
     console.log('loop');
 
     while (running) {
         update();   // 执行游戏逻辑
         draw(); // 绘制游戏
-
-        if (escape()) {
-            running = false;
-        }
     }
 }
 
@@ -40,10 +39,10 @@ function draw() {
     console.log('draw');
 }
 
-function escape() {
-    console.log('escape');
-
-    // return true;
+function keyDown() {
+    if (event.key === 'Escape') {
+        running = false;
+    }
 }
 
 function exit() {
@@ -52,7 +51,7 @@ function exit() {
 </script> -->
 
 
-<script>
+<!-- <script>
 // 基于时间的主循环
 
 main();
@@ -60,35 +59,99 @@ main();
 function main() {
     console.log('main');
 
-    let running = true;
+    running = true; // 为来在loop()里能直接修改running值，去掉了var或let
 
     init(); // 初始化整个体系，框架、图形、声音等等
 
-    loop(running); // 主循环
+    loop(); // 主循环
 
     exit(); // 退出，关闭各种接口等
 }
 
 function init() {
     console.log('init');
+
+    // 绑定esc退出游戏循环
+    document.onkeydown = keyDown;
 }
 
-function loop(running) {
+function loop() {
     console.log('loop');
 
-    let date = new Date();    
-    let totalTime = date.getSeconds();  // 取得当前时间 或程序运行的总时间
+    let totalTime = 0;  // 取得当前时间 或程序运行的总时间
     let lastTime = 0;
     let deltaTime = 0;
 
     while (running) {
-        totalTime = date.getSeconds();
-
-        update();   // 执行游戏逻辑
+        totalTime = new Date().getTime();
+        deltaTime = totalTime - lastTime;
+        lastTime =  totalTime;
+        
+        update(deltaTime);   // 执行游戏逻辑
         draw(); // 绘制游戏
+    }
+}
 
-        if (escape()) {
-            running = false;
+function update(deltaTime) {
+    console.log('update', deltaTime);
+}
+
+function draw() {
+    console.log('draw');
+}
+
+function keyDown() {
+    if (event.key === 'Escape') {
+        running = false;
+    }
+}
+
+function exit() {
+    console.log('exit');
+}
+</script> -->
+
+<!-- <script>
+// 基于帧数时间间隔的主循环
+
+main();
+
+function main() {
+    console.log('main');
+
+    const TIME_INTERVAL = 1000 / 1; // 循环帧数的间隔，1000毫秒 / 帧数
+
+    running = true; // 为来在loop()里能直接修改running值，去掉了var或let
+
+    init(); // 初始化整个体系，框架、图形、声音等等
+
+    loop(TIME_INTERVAL); // 主循环
+
+    exit(); // 退出，关闭各种接口等
+}
+
+function init() {
+    console.log('init');
+
+    // 绑定esc退出游戏循环
+    document.onkeydown = keyDown;
+}
+
+function loop(TIME_INTERVAL) {
+    console.log('loop');
+
+    let totalTime = 0;  // 取得当前时间 或程序运行的总时间
+    let lastTime = 0;
+    let deltaTime = 0;
+
+    while (running) {
+        totalTime = new Date().getTime();
+        deltaTime = totalTime - lastTime;
+
+        if (deltaTime >= TIME_INTERVAL) {                    
+            update();   // 执行游戏逻辑
+            draw(); // 绘制游戏
+            lastTime = totalTime;
         }
     }
 }
@@ -101,17 +164,16 @@ function draw() {
     console.log('draw');
 }
 
-function escape() {
-    console.log('escape');
-
-    // return true;
+function keyDown() {
+    if (event.key === 'Escape') {
+        running = false;
+    }
 }
 
 function exit() {
     console.log('exit');
 }
-</script>
-
+</script> -->
 
 <script>
 // 基于时钟的主循环
