@@ -41,6 +41,7 @@ function draw() {
 
 function keyDown() {
     if (event.key === 'Escape') {
+        console.log('按了Esc');
         running = false;
     }
 }
@@ -102,6 +103,7 @@ function draw() {
 
 function keyDown() {
     if (event.key === 'Escape') {
+        console.log('按了Esc');
         running = false;
     }
 }
@@ -110,6 +112,7 @@ function exit() {
     console.log('exit');
 }
 </script> -->
+
 
 <!-- <script>
 // 基于帧数时间间隔的主循环
@@ -166,6 +169,7 @@ function draw() {
 
 function keyDown() {
     if (event.key === 'Escape') {
+        console.log('按了Esc');
         running = false;
     }
 }
@@ -175,6 +179,55 @@ function exit() {
 }
 </script> -->
 
+
 <script>
 // 基于时钟的主循环
+
+var interval;   // 声明 interval，用来标识触发器
+var frames = 0; // 当前帧数
+
+main();
+
+function main() {
+    console.log('main');
+
+    init(); // 初始化整个体系，框架、图形、声音等等
+
+    interval = setInterval(loop, 1000 / 30); // 主循环; 设定 1000毫秒 / 帧数 毫秒触发一次
+}
+
+function init() {
+    console.log('init');
+
+    // 绑定esc退出游戏循环
+    document.onkeydown = keyDown;
+}
+
+function loop() {
+    frames++;
+    console.log('loop', `第 ${frames} 帧`);
+
+    update();   // 执行游戏逻辑
+    draw(); // 绘制游戏
+}
+
+function update() {
+    console.log('update');
+}
+
+function draw() {
+    console.log('draw');
+}
+
+function keyDown() {
+    if (event.key === 'Escape') {
+        console.log('按了Esc');
+        clearInterval(interval);    // 退出的话，停止事件跟踪
+        exit(); // 退出，关闭各种接口等
+    }
+}
+
+function exit() {
+    console.log('exit');
+}
 </script>
